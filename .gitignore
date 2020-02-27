@@ -9,3 +9,4 @@
 /app/src/main/obj
 /app/src/main/libs
 *.iml
+app/debug/
