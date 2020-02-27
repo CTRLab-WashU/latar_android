@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
 
     Connection connection;
     Proctor proctor;
-    boolean launched = false;
 
     public MainActivity() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();

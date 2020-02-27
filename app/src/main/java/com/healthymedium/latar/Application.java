@@ -9,7 +9,6 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-//        DeviceClock.initialize();
     }
 
     public static Application getInstance(){

@@ -1,7 +1,6 @@
 package com.healthymedium.latar;
 
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.healthymedium.latar.network.Connection;
 

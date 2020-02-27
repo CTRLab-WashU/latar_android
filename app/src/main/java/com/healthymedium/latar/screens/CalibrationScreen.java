@@ -3,7 +3,6 @@ package com.healthymedium.latar.screens;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +20,6 @@ import com.healthymedium.latar.navigation.NavigationManager;
 import com.healthymedium.latar.network.Commands;
 import com.healthymedium.latar.network.Connection;
 import com.healthymedium.latar.network.Message;
-import com.healthymedium.latar.network.models.DisplayLatencyData;
 import com.healthymedium.latar.network.models.TapLatencyData;
 
 import java.lang.reflect.Method;

@@ -1,7 +1,6 @@
 package com.healthymedium.latar.navigation;
 
 import android.support.v4.app.FragmentManager;
-
 import com.healthymedium.latar.BaseFragment;
 import com.healthymedium.latar.R;
 

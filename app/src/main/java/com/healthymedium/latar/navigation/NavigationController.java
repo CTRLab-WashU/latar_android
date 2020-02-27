@@ -2,9 +2,7 @@ package com.healthymedium.latar.navigation;
 
 import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentManager;
-
 import com.healthymedium.latar.BaseFragment;
-
 
 public class NavigationController {
 
