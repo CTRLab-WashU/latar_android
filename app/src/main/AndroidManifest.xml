@@ -30,5 +30,6 @@
             </intent-filter>
         </activity>
         <service android:enabled="true" android:name="com.healthymedium.latar.network.Connection"/>
+        <service android:enabled="true" android:name="com.healthymedium.latar.network.BroadcastService"/>
     </application>
 </manifest>

@@ -1,8 +1,13 @@
 package com.healthymedium.latar.screens;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
@@ -15,19 +20,26 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.healthymedium.latar.BaseFragment;
 import com.healthymedium.latar.R;
+import com.healthymedium.latar.network.BroadcastService;
 import com.healthymedium.latar.network.Connection;
+import com.healthymedium.latar.network.Message;
 import com.healthymedium.latar.network.models.DeviceInfo;
 
 @SuppressLint("ValidFragment")
 public class HomeScreen extends BaseFragment {
 
-    private static final String TCP_ADDRESS = "192.168.191.153";
+    private static String TCP_ADDRESS = "Unknown";
 //private static final String TCP_ADDRESS = "192.168.1.112";
     private static final int TCP_PORT = 4032;
+    private static boolean addressFound = false;
+    private static boolean serviceBound = false;
 
-    Button button;
+    BroadcastService broadcastService;
+
     TextView textViewDeviceInfo;
     TextView textViewStatus;
+    TextView textViewAddress;
+    Button button;
 
     public HomeScreen() {
 
@@ -46,6 +58,8 @@ public class HomeScreen extends BaseFragment {
         textViewDeviceInfo = view.findViewById(R.id.textViewDeviceInfo);
         textViewDeviceInfo.setText(gson.toJson(deviceInfo));
 
+        textViewAddress = view.findViewById(R.id.textViewAddress);
+        textViewAddress.setText("Server Address: "+TCP_ADDRESS);
         textViewStatus = view.findViewById(R.id.textViewStatus);
         button = view.findViewById(R.id.button);
         if(getConnection().isConnected()){
@@ -65,6 +79,11 @@ public class HomeScreen extends BaseFragment {
     public void onResume() {
         super.onResume();
         getConnection().addConnectionListener(connectionListener);
+        if(!addressFound) {
+            Intent intentConnection = new Intent(getMainActivity(), BroadcastService.class);
+            getMainActivity().bindService(intentConnection, serviceConnection, Context.BIND_AUTO_CREATE);
+            serviceBound = true;
+        }
 
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
@@ -83,6 +102,10 @@ public class HomeScreen extends BaseFragment {
     public void onPause() {
         super.onPause();
         getConnection().removeConnectionListener(connectionListener);
+        if(serviceBound) {
+            getMainActivity().unbindService(serviceConnection);
+            serviceBound = false;
+        }
     }
 
 
@@ -135,5 +158,31 @@ public class HomeScreen extends BaseFragment {
             button.setEnabled(true);
         }
     };
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            BroadcastService.LocalBinder binder = (BroadcastService.LocalBinder) service;
+            broadcastService = binder.getService();
+            broadcastService.startReceiving(getMainActivity(), 4172, new BroadcastService.ReceiveListener() {
+                @Override
+                public void onMessageReceived(Message message, String address) {
+                    if(address != TCP_ADDRESS) {
+                        TCP_ADDRESS = address;
+                        textViewAddress.setText("Server Address: "+address);
+                        broadcastService.stopReceiving();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
+
+
 
 }
