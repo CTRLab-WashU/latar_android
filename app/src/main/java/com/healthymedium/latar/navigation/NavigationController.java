@@ -40,33 +40,8 @@ public class NavigationController {
     public void open(BaseFragment fragment) {
         if (fragmentManager != null) {
 
-            TransitionSet transitions = fragment.getTransitionSet();
             String tag = fragment.getSimpleTag();
             fragmentManager.beginTransaction()
-                    .setCustomAnimations(
-                            transitions.enter,
-                            transitions.exit,
-                            transitions.popEnter,
-                            transitions.popExit)
-                    .replace(containerViewId, fragment,tag)
-                    .addToBackStack(tag)
-                    .commitAllowingStateLoss();
-            currentFragmentId = fragment.getId();
-            if(listener!=null){
-                listener.onOpen();
-            }
-        }
-    }
-
-    public void open(BaseFragment fragment, TransitionSet transitions) {
-        if (fragmentManager != null) {
-            String tag = fragment.getSimpleTag();
-            fragmentManager.beginTransaction()
-                    .setCustomAnimations(
-                            transitions.enter,
-                            transitions.exit,
-                            transitions.popEnter,
-                            transitions.popExit)
                     .replace(containerViewId, fragment,tag)
                     .addToBackStack(tag)
                     .commitAllowingStateLoss();

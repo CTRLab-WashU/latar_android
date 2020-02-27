@@ -43,10 +43,6 @@ public class NavigationManager {
         getController().open(fragment);
     }
 
-    public void open(BaseFragment fragment, TransitionSet transition) {
-        getController().open(fragment,transition);
-    }
-
     public void popBackStack() {
         getController().popBackStack();
     }

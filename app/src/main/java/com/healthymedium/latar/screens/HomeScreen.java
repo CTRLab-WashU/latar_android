@@ -3,30 +3,20 @@ package com.healthymedium.latar.screens;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.healthymedium.latar.BaseFragment;
-import com.healthymedium.latar.DeviceClock;
 import com.healthymedium.latar.R;
-import com.healthymedium.latar.navigation.NavigationManager;
-import com.healthymedium.latar.navigation.TransitionSet;
 import com.healthymedium.latar.network.Connection;
 import com.healthymedium.latar.network.models.DeviceInfo;
-import com.healthymedium.latar.network.models.DisplayParams;
-import com.healthymedium.latar.utilities.ViewUtil;
 
 @SuppressLint("ValidFragment")
 public class HomeScreen extends BaseFragment {
