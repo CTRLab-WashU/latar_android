@@ -33,12 +33,10 @@ public class Proctor {
     }
 
     public void registerConnection(Connection connection){
-        if(this.connection!=null){
-            unregisterConnection();
-        }
         if(connection==null){
             return;
         }
+        unregisterConnection();
         connection.addMessageListener(messageListener);
         connection.addConnectionListener(connectionListener);
         this.connection = connection;
@@ -48,6 +46,7 @@ public class Proctor {
         if(connection==null){
             return;
         }
+        connection.disconnect();
         connection.removeMessageListener(messageListener);
         connection.removeConnectionListener(connectionListener);
         this.connection = null;
