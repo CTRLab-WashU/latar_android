@@ -11,4 +11,9 @@
     <color name="text">#4d4d4d</color>
     <color name="black">#000000</color>
     <color name="red">#d65c5c</color>
+
+    <color name="launcher">#3c3cb5</color>
+    <color name="launcher_light">#9a9add</color>
+    <color name="launcher_dark">#232368</color>
+
 </resources>
