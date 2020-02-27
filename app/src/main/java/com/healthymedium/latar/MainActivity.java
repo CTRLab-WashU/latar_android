@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            NavigationManager.getInstance().clearBackStack();
             NavigationManager.getInstance().popBackStack();
         }
     };
