@@ -126,9 +126,11 @@ public class TapLatencyScreen extends BaseFragment {
                 return false;
             }
 
-            sendData(testIndex,action,actionTime,callbackTime,touchMajor,touchMinor);
+            if(action==MotionEvent.ACTION_DOWN) {
+                sendData(testIndex,action,actionTime,callbackTime,touchMajor,touchMinor);
+                testIndex++;
+            }
 
-            testIndex++;
             return true;
         }
     };
