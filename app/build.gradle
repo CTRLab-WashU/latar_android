@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 
 def versionMajor = 0 // max=2000 // bump to mark substantial changes
 def versionMinor = 0 // max=99   // bump for small changes (features, changes in intended behavior, etc)
-def versionPatch = 0 // max=99   // bump for fixes (crashes, unintended behavior, etc)
-def versionBuild = 1 // max=99   // bump for qa builds
+def versionPatch = 1 // max=99   // bump for fixes (crashes, unintended behavior, etc)
+def versionBuild = 0 // max=99   // bump for qa builds
 
 def flavor = getGradle().getStartParameter().getTaskRequests().toString().toLowerCase()
 
