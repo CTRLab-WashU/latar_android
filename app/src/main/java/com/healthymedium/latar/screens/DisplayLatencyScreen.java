@@ -15,10 +15,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.healthymedium.latar.BaseFragment;
 import com.healthymedium.latar.DeviceClock;
+import com.healthymedium.latar.Proctor;
 import com.healthymedium.latar.R;
 import com.healthymedium.latar.navigation.NavigationManager;
 import com.healthymedium.latar.network.Commands;
-import com.healthymedium.latar.network.Connection;
+import com.healthymedium.latar.network.TcpConnection;
 import com.healthymedium.latar.network.Message;
 import com.healthymedium.latar.network.models.DisplayLatencyData;
 import com.healthymedium.latar.network.models.DisplayLatencySetup;
@@ -66,7 +67,7 @@ public class DisplayLatencyScreen extends BaseFragment {
 
             public void onFinish() {
                 Message message = new Message(Commands.DISPLAY_STOP);
-                getConnection().sendMessage(message);
+                Proctor.getTcpConnection().sendMessage(message);
                 Log.i(getSimpleTag(), "onFinish");
                 NavigationManager.getInstance().popBackStack();
                 NavigationManager.getInstance().open(new HomeScreen());
@@ -79,13 +80,13 @@ public class DisplayLatencyScreen extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getConnection().addMessageListener(messageListener);
+        Proctor.getTcpConnection().addMessageListener(messageListener);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getConnection().removeMessageListener(messageListener);
+        Proctor.getTcpConnection().removeMessageListener(messageListener);
     }
 
     private void sendData(int index, int color, long callbackTime, long displayTime){
@@ -105,10 +106,10 @@ public class DisplayLatencyScreen extends BaseFragment {
         message.setCommand(Commands.DISPLAY_DATA);
         message.setBody(string);
 
-        getConnection().sendMessage(message);
+        Proctor.getTcpConnection().sendMessage(message);
     }
 
-    Connection.MessageListener messageListener = new Connection.MessageListener() {
+    TcpConnection.MessageListener messageListener = new TcpConnection.MessageListener() {
         @Override
         public void onMessageReceived(Message message) {
             char cmd = message.getCommand();
@@ -128,7 +129,7 @@ public class DisplayLatencyScreen extends BaseFragment {
 
                         public void onFinish() {
                             Message message = new Message(Commands.DISPLAY_STOP);
-                            getConnection().sendMessage(message);
+                            Proctor.getTcpConnection().sendMessage(message);
                             Log.i(getSimpleTag(), "onFinish");
                             NavigationManager.getInstance().popBackStack();
                             NavigationManager.getInstance().open(new HomeScreen());

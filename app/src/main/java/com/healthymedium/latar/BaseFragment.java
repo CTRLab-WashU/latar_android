@@ -2,8 +2,6 @@ package com.healthymedium.latar;
 
 import android.support.v4.app.Fragment;
 
-import com.healthymedium.latar.network.Connection;
-
 public class BaseFragment extends Fragment {
 
     String tag = getClass().getSimpleName();
@@ -20,10 +18,6 @@ public class BaseFragment extends Fragment {
 
     public Application getApplication(){
         return (Application)getMainActivity().getApplication();
-    }
-
-    public Connection getConnection(){
-        return getMainActivity().getConnection();
     }
 
 }

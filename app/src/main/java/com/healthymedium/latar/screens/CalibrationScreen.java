@@ -15,10 +15,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.healthymedium.latar.BaseFragment;
 import com.healthymedium.latar.DeviceClock;
+import com.healthymedium.latar.Proctor;
 import com.healthymedium.latar.R;
 import com.healthymedium.latar.navigation.NavigationManager;
 import com.healthymedium.latar.network.Commands;
-import com.healthymedium.latar.network.Connection;
+import com.healthymedium.latar.network.TcpConnection;
 import com.healthymedium.latar.network.Message;
 import com.healthymedium.latar.network.models.TapLatencyData;
 
@@ -51,16 +52,16 @@ public class CalibrationScreen extends BaseFragment {
     public void onResume() {
         super.onResume();
         Message message = new Message(Commands.CALIBRATION_SETUP);
-        getConnection().sendMessage(message);
-        getConnection().addMessageListener(messageListener);
+        Proctor.getTcpConnection().sendMessage(message);
+        Proctor.getTcpConnection().addMessageListener(messageListener);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         Message message = new Message(Commands.CALIBRATION_TEARDOWN);
-        getConnection().sendMessage(message);
-        getConnection().removeMessageListener(messageListener);
+        Proctor.getTcpConnection().sendMessage(message);
+        Proctor.getTcpConnection().removeMessageListener(messageListener);
     }
 
     private long getEventTimeMicro(MotionEvent event) {
@@ -91,10 +92,10 @@ public class CalibrationScreen extends BaseFragment {
         message.setCommand(Commands.CALIBRATION_TOUCH);
         message.setBody(string);
 
-        getConnection().sendMessage(message);
+        Proctor.getTcpConnection().sendMessage(message);
     }
 
-    Connection.MessageListener messageListener = new Connection.MessageListener() {
+    TcpConnection.MessageListener messageListener = new TcpConnection.MessageListener() {
         @Override
         public void onMessageReceived(Message message) {
             char cmd = message.getCommand();
@@ -105,7 +106,7 @@ public class CalibrationScreen extends BaseFragment {
                     testView.setBackgroundColor(color);
 
                     message.setAcknowledgement(false);
-                    getConnection().sendMessage(message);
+                    Proctor.getTcpConnection().sendMessage(message);
                     break;
                 case Commands.CALIBRATION_TEARDOWN:
                     testView.setOnTouchListener(null);

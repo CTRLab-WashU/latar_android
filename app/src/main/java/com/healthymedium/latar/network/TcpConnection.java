@@ -18,14 +18,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Connection extends Service {
+public class TcpConnection extends Service {
 
     private static final String tag = "Connection";
     private final IBinder mBinder = new LocalBinder();
 
     public class LocalBinder extends Binder {
-        public Connection getService() {
-            return Connection.this;
+        public TcpConnection getService() {
+            return TcpConnection.this;
         }
     }
 
@@ -42,7 +42,7 @@ public class Connection extends Service {
     public int STATE_TCP = STATE_TCP_DISCONNECTED;
 
     private List<MessageListener> messageListeners = new ArrayList<>();
-    private List<ConnectionListener> connectionListeners = new ArrayList<>();
+    private List<Listener> connectionListeners = new ArrayList<>();
     private TcpTask tcpTask;
 
     private ByteArrayOutputStream serverMessage;
@@ -53,7 +53,7 @@ public class Connection extends Service {
     private DataOutputStream bufferOut;
     private boolean runningTcp = false;
 
-    public Connection() {
+    public TcpConnection() {
 
     }
 
@@ -63,7 +63,8 @@ public class Connection extends Service {
         serverPort = port;
 
         tcpTask = new TcpTask();
-        tcpTask.execute();
+//        tcpTask.execute();
+        tcpTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void disconnect(){
@@ -86,11 +87,11 @@ public class Connection extends Service {
         return STATE_TCP==STATE_TCP_CONNECTED;
     }
 
-    public void addConnectionListener(ConnectionListener connectionListener){
+    public void addListener(Listener connectionListener){
         connectionListeners.add(connectionListener);
     }
 
-    public void removeConnectionListener(ConnectionListener connectionListener){
+    public void removeListener(Listener connectionListener){
         connectionListeners.remove(connectionListener);
     }
 
@@ -135,7 +136,7 @@ public class Connection extends Service {
                         @Override
                         public void run() {
                             Log.i(tag,"connected");
-                            for(ConnectionListener listener : connectionListeners){
+                            for(Listener listener : connectionListeners){
                                 if (listener != null) {
                                     listener.onConnected();
                                 }
@@ -163,7 +164,7 @@ public class Connection extends Service {
                         @Override
                         public void run() {
                             Log.i(tag,"error: " + e);
-                            for(ConnectionListener listener : connectionListeners){
+                            for(Listener listener : connectionListeners){
                                 if (listener != null) {
                                     listener.onError(e);
                                 }
@@ -178,7 +179,7 @@ public class Connection extends Service {
                     @Override
                     public void run() {
                         Log.i(tag,"disconnected");
-                        for(ConnectionListener listener : connectionListeners){
+                        for(Listener listener : connectionListeners){
                             if (listener != null) {
                                 listener.onDisconnected();
                             }
@@ -192,7 +193,7 @@ public class Connection extends Service {
                     @Override
                     public void run() {
                         Log.i(tag,"error: " + e);
-                        for(ConnectionListener listener : connectionListeners){
+                        for(Listener listener : connectionListeners){
                             if (listener != null) {
                                 listener.onError(e);
                             }
@@ -229,7 +230,7 @@ public class Connection extends Service {
         }
     }
 
-    public interface ConnectionListener {
+    public interface Listener {
         void onConnected();
         void onDisconnected();
         void onError(Exception e);

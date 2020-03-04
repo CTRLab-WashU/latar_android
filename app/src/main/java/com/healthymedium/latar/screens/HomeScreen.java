@@ -1,13 +1,9 @@
 package com.healthymedium.latar.screens;
 
 import android.annotation.SuppressLint;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
@@ -19,27 +15,20 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.healthymedium.latar.BaseFragment;
+import com.healthymedium.latar.Proctor;
 import com.healthymedium.latar.R;
-import com.healthymedium.latar.network.BroadcastService;
-import com.healthymedium.latar.network.Connection;
-import com.healthymedium.latar.network.Message;
+import com.healthymedium.latar.network.TcpConnection;
 import com.healthymedium.latar.network.models.DeviceInfo;
 
 @SuppressLint("ValidFragment")
 public class HomeScreen extends BaseFragment {
 
-    private static String TCP_ADDRESS = "Unknown";
-//private static final String TCP_ADDRESS = "192.168.1.112";
-    private static final int TCP_PORT = 4032;
-    private static boolean addressFound = false;
-    private static boolean serviceBound = false;
-
-    BroadcastService broadcastService;
-
     TextView textViewDeviceInfo;
     TextView textViewStatus;
     TextView textViewAddress;
     Button button;
+
+    Handler handler = new Handler();
 
     public HomeScreen() {
 
@@ -59,10 +48,10 @@ public class HomeScreen extends BaseFragment {
         textViewDeviceInfo.setText(gson.toJson(deviceInfo));
 
         textViewAddress = view.findViewById(R.id.textViewAddress);
-        textViewAddress.setText("Server Address: "+TCP_ADDRESS);
+        textViewAddress.setText("Server Address: "+ Proctor.get().getServerAddress());
         textViewStatus = view.findViewById(R.id.textViewStatus);
         button = view.findViewById(R.id.button);
-        if(getConnection().isConnected()){
+        if(Proctor.get().isConnected()){
             button.setText("Disconnect");
             button.setOnClickListener(OnClickListenerDisconnect);
             textViewStatus.setText("Connected");
@@ -78,12 +67,32 @@ public class HomeScreen extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getConnection().addConnectionListener(connectionListener);
-        if(!addressFound) {
-            Intent intentConnection = new Intent(getMainActivity(), BroadcastService.class);
-            getMainActivity().bindService(intentConnection, serviceConnection, Context.BIND_AUTO_CREATE);
-            serviceBound = true;
-        }
+
+        Proctor.get().setListener(new Proctor.Listener() {
+            @Override
+            public void onServiceBound() {
+                Proctor.getTcpConnection().addListener(connectionListener);
+            }
+
+            @Override
+            public void onServiceUnbound() {
+                Proctor.getTcpConnection().removeListener(connectionListener);
+            }
+
+            @Override
+            public void onServerFound(String address) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(textViewAddress!=null){
+                            textViewAddress.setText("Server Address: "+ Proctor.get().getServerAddress());
+                        }
+                    }
+                },100);
+
+            }
+        });
+
 
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
@@ -101,15 +110,11 @@ public class HomeScreen extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        getConnection().removeConnectionListener(connectionListener);
-        if(serviceBound) {
-            getMainActivity().unbindService(serviceConnection);
-            serviceBound = false;
-        }
+        Proctor.get().removeListener();
     }
 
 
-    Connection.ConnectionListener connectionListener = new Connection.ConnectionListener() {
+    TcpConnection.Listener connectionListener = new TcpConnection.Listener() {
         @Override
         public void onConnected() {
             button.setEnabled(false);
@@ -144,7 +149,7 @@ public class HomeScreen extends BaseFragment {
             button.setEnabled(false);
             button.setText("Connecting");
             textViewStatus.setText("");
-            getConnection().connect(TCP_ADDRESS,TCP_PORT);
+            Proctor.get().connect();
         }
     };
 
@@ -154,35 +159,9 @@ public class HomeScreen extends BaseFragment {
             button.setEnabled(false);
             button.setText("");
             textViewStatus.setText("");
-            getConnection().disconnect();
+            Proctor.get().disconnect();
             button.setEnabled(true);
         }
     };
-
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            BroadcastService.LocalBinder binder = (BroadcastService.LocalBinder) service;
-            broadcastService = binder.getService();
-            broadcastService.startReceiving(getMainActivity(), 4172, new BroadcastService.ReceiveListener() {
-                @Override
-                public void onMessageReceived(Message message, String address) {
-                    if(address != TCP_ADDRESS) {
-                        TCP_ADDRESS = address;
-                        textViewAddress.setText("Server Address: "+address);
-                        broadcastService.stopReceiving();
-                    }
-                }
-            });
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    };
-
-
-
 
 }

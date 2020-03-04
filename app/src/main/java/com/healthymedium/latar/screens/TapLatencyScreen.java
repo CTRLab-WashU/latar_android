@@ -8,17 +8,14 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.healthymedium.latar.BaseFragment;
 import com.healthymedium.latar.DeviceClock;
+import com.healthymedium.latar.Proctor;
 import com.healthymedium.latar.R;
-import com.healthymedium.latar.navigation.NavigationManager;
 import com.healthymedium.latar.network.Commands;
-import com.healthymedium.latar.network.Connection;
 import com.healthymedium.latar.network.Message;
 import com.healthymedium.latar.network.models.TapLatencyData;
 import com.healthymedium.latar.utilities.ViewUtil;
@@ -52,13 +49,11 @@ public class TapLatencyScreen extends BaseFragment {
     public void onResume() {
         Log.i(getSimpleTag(),"onResume");
         super.onResume();
-//        getConnection().addMessageListener(messageListener);
     }
 
     @Override
     public void onPause() {
         Log.i(getSimpleTag(),"onPause");
-//        getConnection().removeMessageListener(messageListener);
         super.onPause();
     }
 
@@ -92,26 +87,8 @@ public class TapLatencyScreen extends BaseFragment {
         message.setCommand(Commands.TAP_DATA);
         message.setBody(string);
 
-        getConnection().sendMessage(message);
+        Proctor.getTcpConnection().sendMessage(message);
     }
-
-//    Connection.MessageListener messageListener = new Connection.MessageListener() {
-//        @Override
-//        public void onMessageReceived(Message message) {
-//            char cmd = message.getCommand();
-//            switch (cmd){
-//                case Commands.TAP_START:
-//                    testIndex = 0;
-//                    testView.setOnTouchListener(touchListener);
-//                    break;
-//                case Commands.TAP_STOP:
-//                    testView.setOnTouchListener(null);
-//                    NavigationManager.getInstance().popBackStack();
-//                    NavigationManager.getInstance().open(new HomeScreen());
-//                    break;
-//            }
-//        }
-//    };
 
     View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override

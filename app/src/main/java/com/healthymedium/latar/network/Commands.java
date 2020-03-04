@@ -2,6 +2,8 @@ package com.healthymedium.latar.network;
 
 public class Commands {
 
+    public static final char BROADCAST              = 0x20;
+
     public static final char CLOCK_SYNC             = 0x21; // init clock synchronzation
     public static final char CLOCK_UPDATE           = 0x22; // data for clock synchronzation
 
