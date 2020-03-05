@@ -63,7 +63,6 @@ public class TcpConnection extends Service {
         serverPort = port;
 
         tcpTask = new TcpTask();
-//        tcpTask.execute();
         tcpTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
