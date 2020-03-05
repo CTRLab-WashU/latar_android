@@ -295,7 +295,7 @@ public class Proctor {
 
     public String getServerAddress(){
         if(serverAddress==null){
-            return "Unkown";
+            return "Unknown";
         }
         return serverAddress.getHostAddress();
     }
