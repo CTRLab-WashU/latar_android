@@ -293,6 +293,10 @@ public class Proctor {
         }
     };
 
+    public boolean hasServerAddress(){
+        return (serverAddress!=null);
+    }
+
     public String getServerAddress(){
         if(serverAddress==null){
             return "Unknown";

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
@@ -61,6 +62,12 @@ public class HomeScreen extends BaseFragment {
             textViewStatus.setText("Not Connected");
         }
 
+        if(!Proctor.get().hasServerAddress()) {
+            button.setEnabled(false);
+        }
+
+        handler = new Handler(Looper.getMainLooper());
+
         return view;
     }
 
@@ -86,6 +93,7 @@ public class HomeScreen extends BaseFragment {
                     public void run() {
                         if(textViewAddress!=null){
                             textViewAddress.setText("Server Address: "+ Proctor.get().getServerAddress());
+                            button.setEnabled(true);
                         }
                     }
                 },100);
