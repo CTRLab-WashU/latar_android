@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.SocketException;
 
 public class UdpService extends Service {
 
@@ -99,7 +102,8 @@ public class UdpService extends Service {
         protected Void doInBackground(Void... nothing) {
             try {
                 // keep a socket open to listen to all the UDP trafic that is destined for this port
-                socket = new DatagramSocket(receivePort, InetAddress.getByName("0.0.0.0"));
+                socket = new DatagramSocket(new InetSocketAddress(InetAddress.getLocalHost(),receivePort));
+                socket.setReuseAddress(true);
                 socket.setBroadcast(true);
 
                 isReceiving = true;
