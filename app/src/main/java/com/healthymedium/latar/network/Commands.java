@@ -9,7 +9,8 @@ public class Commands {
 
     public static final char DEVICE_INFO            = 0x24; // device information for reference
     public static final char DEVICE_IDENTIFY        = 0x25; // make device self identify for user
-    public static final char RESET                  = 0x26; // stop everything and reset
+    public static final char APP_ERROR              = 0x26; // raise the white flag
+    public static final char APP_RESET              = 0x27; // stop everything and reset
 
     public static final char CALIBRATION_SETUP      = 0x47;
     public static final char CALIBRATION_DISPLAY    = 0x48;
