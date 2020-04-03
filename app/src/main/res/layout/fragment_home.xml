@@ -40,11 +40,12 @@
     <TextView
         android:id="@+id/textViewAddress"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="38dp"
         android:layout_above="@id/button"
-        android:text="Server Address: "
         android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"/>
+        android:layout_marginRight="32dp"
+        android:gravity="center_vertical"
+        android:text="Server Address: " />
 
     <Button
         android:id="@+id/button"

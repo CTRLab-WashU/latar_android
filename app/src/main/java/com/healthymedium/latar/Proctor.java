@@ -26,6 +26,7 @@ import com.healthymedium.latar.screens.TapLatencyScreen;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -292,6 +293,18 @@ public class Proctor {
 
         }
     };
+
+    public boolean setServerAddress(String string){
+        try {
+            InetAddress address = InetAddress.getByName(string);
+            addressFound = true;
+            serverAddress = address;
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
     public boolean hasServerAddress(){
         return (serverAddress!=null);

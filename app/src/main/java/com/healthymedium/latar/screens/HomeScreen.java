@@ -1,6 +1,8 @@
 package com.healthymedium.latar.screens;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -50,6 +54,15 @@ public class HomeScreen extends BaseFragment {
 
         textViewAddress = view.findViewById(R.id.textViewAddress);
         textViewAddress.setText("Server Address: "+ Proctor.get().getServerAddress());
+        textViewAddress.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                buildAddressDialog();
+                return false;
+            }
+        });
+
+
         textViewStatus = view.findViewById(R.id.textViewStatus);
         button = view.findViewById(R.id.button);
         if(Proctor.get().isConnected()){
@@ -92,6 +105,7 @@ public class HomeScreen extends BaseFragment {
                     @Override
                     public void run() {
                         if(textViewAddress!=null){
+                            textViewAddress.setOnLongClickListener(null);
                             textViewAddress.setText("Server Address: "+ Proctor.get().getServerAddress());
                             button.setEnabled(true);
                         }
@@ -171,5 +185,49 @@ public class HomeScreen extends BaseFragment {
             button.setEnabled(true);
         }
     };
+
+    AlertDialog dialog;
+
+    void buildAddressDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        View view = View.inflate(getContext(),R.layout.dialog_address,null);
+        alertDialog.setView(view);
+
+
+        final EditText editText = view.findViewById(R.id.editText);
+        final Button buttonCancel = view.findViewById(R.id.buttonCancel);
+        final Button buttonSave = view.findViewById(R.id.buttonSave);
+
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonCancel.setEnabled(false);
+                buttonSave.setEnabled(false);
+                dialog.dismiss();
+            }
+        });
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonCancel.setEnabled(false);
+                buttonSave.setEnabled(false);
+
+                String string = editText.getText().toString();
+                Proctor.get().setServerAddress(string);
+                if (textViewAddress != null) {
+                    textViewAddress.setText("Server Address: " + Proctor.get().getServerAddress());
+                    button.setEnabled(true);
+                }
+
+                dialog.dismiss();
+            }
+        });
+
+        dialog = alertDialog.show();
+    }
+
+
+
 
 }
