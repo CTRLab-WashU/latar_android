@@ -132,14 +132,12 @@ public class DisplayLatencyScreen extends BaseFragment {
                             Proctor.getTcpConnection().sendMessage(message);
                             Log.i(getSimpleTag(), "onFinish");
                             NavigationManager.getInstance().popBackStack();
-                            NavigationManager.getInstance().open(new HomeScreen());
                         }
 
                     }.start();
                     break;
                 case Commands.DISPLAY_STOP:
                     NavigationManager.getInstance().popBackStack();
-                    NavigationManager.getInstance().open(new HomeScreen());
                     break;
             }
         }

@@ -134,17 +134,21 @@ public class Proctor {
                     break;
                 case Commands.DEVICE_IDENTIFY:
                     break;
+                case Commands.APP_RESET:
+                    clockUpdates.clear();
+                    int count = NavigationManager.getInstance().getBackStackEntryCount();
+                    if(count > 1) {
+                        NavigationManager.getInstance().popBackStack();
+                    }
+                    break;
                 case Commands.CALIBRATION_SETUP:
-                    NavigationManager.getInstance().popBackStack();
                     NavigationManager.getInstance().open(new CalibrationScreen());
                     break;
                 case Commands.DISPLAY_START:
                     DisplayParams params = gson.fromJson(message.getBodyAsString(),DisplayParams.class);
-                    NavigationManager.getInstance().popBackStack();
                     NavigationManager.getInstance().open(new DisplayLatencyScreen(params));
                     break;
                 case Commands.TAP_START:
-                    NavigationManager.getInstance().popBackStack();
                     NavigationManager.getInstance().open(new TapLatencyScreen());
                     message.setAcknowledgement(false);
                     connection.sendMessage(message);
@@ -152,7 +156,8 @@ public class Proctor {
                 case Commands.TAP_STOP:
                     Log.i("Proctor","TAP_STOP");
                     NavigationManager.getInstance().popBackStack();
-                    NavigationManager.getInstance().open(new HomeScreen());
+                    message.setAcknowledgement(false);
+                    connection.sendMessage(message);
                     break;
             }
 
