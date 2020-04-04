@@ -102,9 +102,8 @@ public class UdpService extends Service {
         protected Void doInBackground(Void... nothing) {
             try {
                 // keep a socket open to listen to all the UDP trafic that is destined for this port
-                socket = new DatagramSocket(new InetSocketAddress(InetAddress.getLocalHost(),receivePort));
+                socket = new DatagramSocket(receivePort,InetAddress.getByName("0.0.0.0"));
                 socket.setReuseAddress(true);
-                socket.setBroadcast(true);
 
                 isReceiving = true;
                 while (isReceiving) {
