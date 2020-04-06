@@ -12,11 +12,6 @@ public class Commands {
     public static final char APP_ERROR              = 0x26; // raise the white flag
     public static final char APP_RESET              = 0x27; // stop everything and reset
 
-    public static final char CALIBRATION_SETUP      = 0x47;
-    public static final char CALIBRATION_DISPLAY    = 0x48;
-    public static final char CALIBRATION_TOUCH      = 0x49;
-    public static final char CALIBRATION_TEARDOWN   = 0x4B;
-
     public static final char DISPLAY_START          = 0x28;
     public static final char DISPLAY_DATA           = 0x29;
     public static final char DISPLAY_STOP           = 0x2A;
@@ -24,5 +19,11 @@ public class Commands {
     public static final char TAP_START              = 0x2B;
     public static final char TAP_DATA               = 0x2C;
     public static final char TAP_STOP               = 0x2D;
+
+    public static final char CALIBRATION_TOUCH_START    = 0x2E;
+    public static final char CALIBRATION_TOUCH_STOP     = 0x2F;
+
+    public static final char CALIBRATION_DISPLAY_START  = 0x30;
+    public static final char CALIBRATION_DISPLAY_STOP   = 0x31;
 
 }

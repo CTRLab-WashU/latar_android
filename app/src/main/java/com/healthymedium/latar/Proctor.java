@@ -19,10 +19,10 @@ import com.healthymedium.latar.network.UdpService;
 import com.healthymedium.latar.network.models.ClockUpdate;
 import com.healthymedium.latar.network.models.DeviceInfo;
 import com.healthymedium.latar.network.models.DisplayParams;
-import com.healthymedium.latar.screens.CalibrationScreen;
+import com.healthymedium.latar.screens.DisplayCalibrationScreen;
 import com.healthymedium.latar.screens.DisplayLatencyScreen;
-import com.healthymedium.latar.screens.HomeScreen;
 import com.healthymedium.latar.screens.TapLatencyScreen;
+import com.healthymedium.latar.screens.TouchCalibrationScreen;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -141,9 +141,6 @@ public class Proctor {
                         NavigationManager.getInstance().popBackStack();
                     }
                     break;
-                case Commands.CALIBRATION_SETUP:
-                    NavigationManager.getInstance().open(new CalibrationScreen());
-                    break;
                 case Commands.DISPLAY_START:
                     DisplayParams params = gson.fromJson(message.getBodyAsString(),DisplayParams.class);
                     NavigationManager.getInstance().open(new DisplayLatencyScreen(params));
@@ -158,6 +155,12 @@ public class Proctor {
                     NavigationManager.getInstance().popBackStack();
                     message.setAcknowledgement(false);
                     connection.sendMessage(message);
+                    break;
+                case Commands.CALIBRATION_TOUCH_START:
+                    NavigationManager.getInstance().open(new TouchCalibrationScreen());
+                    break;
+                case Commands.CALIBRATION_DISPLAY_START:
+                    NavigationManager.getInstance().open(new DisplayCalibrationScreen());
                     break;
             }
 
