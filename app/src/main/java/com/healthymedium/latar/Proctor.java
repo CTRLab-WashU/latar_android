@@ -158,6 +158,8 @@ public class Proctor {
                     break;
                 case Commands.CALIBRATION_TOUCH_START:
                     NavigationManager.getInstance().open(new TouchCalibrationScreen());
+                    message.setAcknowledgement(false);
+                    connection.sendMessage(message);
                     break;
                 case Commands.CALIBRATION_DISPLAY_START:
                     NavigationManager.getInstance().open(new DisplayCalibrationScreen());
