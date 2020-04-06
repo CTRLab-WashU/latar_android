@@ -124,7 +124,7 @@ public class TcpConnection extends Service {
 
             try {
                 Socket socket = new Socket();
-                socket.connect(new InetSocketAddress(serverAddress, serverPort), 1000);
+                socket.connect(new InetSocketAddress(serverAddress, serverPort), 5000);
 
                 try {
                     bufferIn = new DataInputStream(socket.getInputStream());
