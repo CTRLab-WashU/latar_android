@@ -5,6 +5,7 @@ import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.healthymedium.latar.navigation.NavigationManager;
 import com.healthymedium.latar.screens.HomeScreen;
@@ -17,6 +18,15 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         NavigationManager.initialize(getSupportFragmentManager());
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        WindowManager.LayoutParams layout = getWindow()
+                .getAttributes();
+        layout.screenBrightness = 1F;
+        getWindow().setAttributes(layout);
     }
 
     @Override
