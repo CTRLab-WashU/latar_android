@@ -130,12 +130,7 @@ public class TouchCalibrationScreen extends BaseFragment {
                     message.setBody(string);
                     Proctor.getTcpConnection().sendMessage(message);
 
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            NavigationManager.getInstance().popBackStack();
-                        }
-                    });
+                    NavigationManager.getInstance().popBackStack();
                     break;
             }
         }
