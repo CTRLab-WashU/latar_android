@@ -10,3 +10,4 @@
 /app/src/main/libs
 *.iml
 app/debug/
+app/.externalNativeBuild/
