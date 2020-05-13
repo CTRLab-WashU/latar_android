@@ -110,7 +110,7 @@ public class Workloads {
         return new Workload() {
 
             Gson gson;
-            Matrix matrix = new Matrix(2000,2000,3.14159);
+            Matrix matrix = new Matrix(200,200,3.14159);
 
             @Override
             public void setup() {
