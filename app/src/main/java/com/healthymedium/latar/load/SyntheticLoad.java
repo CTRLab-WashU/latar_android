@@ -9,9 +9,11 @@ public class SyntheticLoad {
 
     List<Worker> threads = new ArrayList<>();
     LoadParameters params;
+    boolean running = false;
 
     public void start(@NonNull LoadParameters params) {
         this.params = params;
+        running = true;
 
         for(int i=0;i<params.threadCount;i++){
             Worker thread = new Worker(
@@ -25,6 +27,10 @@ public class SyntheticLoad {
             thread.start();
         }
 
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     public LoadResult stop() {
@@ -48,6 +54,7 @@ public class SyntheticLoad {
         }
 
         threads.clear();
+        running = false;
         return new LoadResult(results);
     }
 
