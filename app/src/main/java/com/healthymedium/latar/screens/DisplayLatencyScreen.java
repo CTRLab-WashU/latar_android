@@ -67,6 +67,8 @@ public class DisplayLatencyScreen extends BaseFragment {
 
             public void onFinish() {
                 Message message = new Message(Commands.DISPLAY_STOP);
+                message.setComment(Proctor.get().stopLoad());
+
                 Proctor.getTcpConnection().sendMessage(message);
                 Log.i(getSimpleTag(), "onFinish");
                 NavigationManager.getInstance().popBackStack();

@@ -11,6 +11,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.healthymedium.latar.load.LoadParameters;
+import com.healthymedium.latar.load.SyntheticLoad;
 import com.healthymedium.latar.navigation.NavigationManager;
 import com.healthymedium.latar.network.Commands;
 import com.healthymedium.latar.network.TcpConnection;
@@ -56,6 +58,8 @@ public class Proctor {
     Listener listener;
     Gson gson;
 
+    SyntheticLoad load;
+
     // ------------------------------------------------------------------------
 
 
@@ -68,6 +72,8 @@ public class Proctor {
         wifiManager = (WifiManager)context.getSystemService(WIFI_SERVICE);
         wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF,"WIFI_LOCK");
         wifiLock.acquire();
+
+        load = new SyntheticLoad();
     }
 
     public static Proctor get(){
@@ -136,16 +142,19 @@ public class Proctor {
                     break;
                 case Commands.APP_RESET:
                     clockUpdates.clear();
+                    stopLoad();
                     int count = NavigationManager.getInstance().getBackStackEntryCount();
                     if(count > 1) {
                         NavigationManager.getInstance().popBackStack();
                     }
                     break;
                 case Commands.DISPLAY_START:
+                    startLoad(message.getComment());
                     DisplayParams params = gson.fromJson(message.getBodyAsString(),DisplayParams.class);
                     NavigationManager.getInstance().open(new DisplayLatencyScreen(params));
                     break;
                 case Commands.TAP_START:
+                    startLoad(message.getComment());
                     NavigationManager.getInstance().open(new TapLatencyScreen());
                     message.setAcknowledgement(false);
                     connection.sendMessage(message);
@@ -154,6 +163,7 @@ public class Proctor {
                     Log.i("Proctor","TAP_STOP");
                     NavigationManager.getInstance().popBackStack();
                     message.setAcknowledgement(false);
+                    message.setComment(stopLoad());
                     connection.sendMessage(message);
                     break;
                 case Commands.CALIBRATION_TOUCH_START:
@@ -340,5 +350,23 @@ public class Proctor {
         void onServiceUnbound();
         void onServerFound(String address);
     }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void startLoad(String paramString){
+        if(paramString.isEmpty()){
+            return;
+        }
+        LoadParameters params = gson.fromJson(paramString, LoadParameters.class);
+        load.start(params);
+    }
+
+    public String stopLoad(){
+        if(!load.isRunning()){
+            return "";
+        }
+        return gson.toJson(load.stop());
+    }
+
 
 }
