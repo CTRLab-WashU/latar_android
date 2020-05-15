@@ -8,11 +8,12 @@ import java.util.List;
 public class SyntheticLoad {
 
     List<Worker> threads = new ArrayList<>();
-    LoadParameters params;
     boolean running = false;
 
     public void start(@NonNull LoadParameters params) {
-        this.params = params;
+        if(params.workload.isEmpty()){
+            return;
+        }
         running = true;
 
         for(int i=0;i<params.threadCount;i++){
