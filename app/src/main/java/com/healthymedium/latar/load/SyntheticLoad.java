@@ -14,6 +14,8 @@ public class SyntheticLoad {
         if(params.workload.isEmpty()){
             return;
         }
+        params.checkThreadCount();
+
         running = true;
 
         for(int i=0;i<params.threadCount;i++){
