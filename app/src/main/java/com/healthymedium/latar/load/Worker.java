@@ -35,7 +35,12 @@ class Worker extends Thread {
 
         long delta;
 
-        workload.setup();
+        if(workload!=null){
+            workload.setup();
+        } else {
+            running = false;
+        }
+
         start = DateTime.now();
 
         while(running) {
