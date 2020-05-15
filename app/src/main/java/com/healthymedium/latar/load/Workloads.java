@@ -14,13 +14,13 @@ public class Workloads {
     public final static String SERIALIZATION = "serialization";
 
     public static Workload get(String workload) {
-        if(workload=="regex") {
+        if(workload.equals("regex")) {
             return regex();
         }
-        if(workload=="matrix") {
+        if(workload.equals("matrix")) {
             return matrix();
         }
-        if(workload=="serialization") {
+        if(workload.equals("serialization")) {
             return serialization();
         }
         return null;
