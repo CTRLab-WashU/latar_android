@@ -162,7 +162,7 @@ public class Message {
             }
             if(first != -1){
                 slice = Arrays.copyOfRange(buffer, 0, first);
-                byte commentArray[] = Arrays.copyOfRange(buffer, first, last);
+                byte commentArray[] = Arrays.copyOfRange(buffer, first+1, last);
                 comment = new String(commentArray);
             }
         }
