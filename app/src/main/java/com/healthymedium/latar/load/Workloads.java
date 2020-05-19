@@ -45,7 +45,9 @@ public class Workloads {
 
             @Override
             public void run() {
-                pattern.split(string);
+                for(int i=0; i<100; i++){
+                    pattern.split(string);
+                }
             }
         };
     }
